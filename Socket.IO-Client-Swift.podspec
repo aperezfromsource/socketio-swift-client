@@ -14,9 +14,10 @@ Pod::Spec.new do |s|
   s.ios.deployment_target = '8.0'
   s.osx.deployment_target = '10.10'
   s.tvos.deployment_target = '9.0'
-  s.source       = { :git => "https://github.com/socketio/socket.io-client-swift.git", :tag => 'v9.0.1' }
+  s.source       = { :git => "https://github.com/aperezfromsource/socketio-swift-client", :tag => 'v9.0.1' }
   s.source_files  = "Source/**/*.swift"
   s.requires_arc = true
-  s.pod_target_xcconfig = {'SWIFT_VERSION' => '5'}
+  s.swift_version = "5"
+  s.pod_target_xcconfig = {'SWIFT_VERSION' => '5.0'}
   # s.dependency 'Starscream', '~> 0.9' # currently this repo includes Starscream swift files
 end
