@@ -28,7 +28,7 @@ import Foundation
 /// A class that represents a waiting ack call.
 ///
 /// **NOTE**: You should not store this beyond the life of the event handler.
-public final class SocketAckEmitter : NSObject {
+@objc public final class SocketAckEmitter : NSObject {
     let socket: SocketIOClient
     let ackNum: Int
 
@@ -65,7 +65,7 @@ public final class SocketAckEmitter : NSObject {
     /// Call to ack receiving this event.
     ///
     /// - parameter items: An array of items to send when acking. Use `[]` to send nothing.
-    public func with(_ items: [Any]) {
+    @objc public func with(_ items: [Any]) {
         guard ackNum != -1 else { return }
 
         socket.emitAck(ackNum, with: items)
@@ -82,18 +82,18 @@ public final class SocketAckEmitter : NSObject {
 ///     ...
 /// }
 /// ```
-public final class OnAckCallback : NSObject {
+@objc public final class OnAckCallback : NSObject {
     private let ackNumber: Int
     private let items: [Any]
     private weak var socket: SocketIOClient?
 
-    init(ackNumber: Int, items: [Any], socket: SocketIOClient) {
+    @objc init(ackNumber: Int, items: [Any], socket: SocketIOClient) {
         self.ackNumber = ackNumber
         self.items = items
         self.socket = socket
     }
 
-    deinit {
+    @objc deinit {
         DefaultSocketLogger.Logger.log("OnAckCallback for \(ackNumber) being released", type: "OnAckCallback")
     }
 
@@ -104,7 +104,7 @@ public final class OnAckCallback : NSObject {
     /// - parameter after: The number of seconds before this emit times out if an ack hasn't been received.
     /// - parameter callback: The callback called when an ack is received, or when a timeout happens.
     ///                       To check for timeout, use `SocketAckStatus`'s `noAck` case.
-    public func timingOut(after seconds: Int, callback: @escaping AckCallback) {
+    @objc public func timingOut(after seconds: Int, callback: @escaping AckCallback) {
         guard let socket = self.socket, ackNumber != -1 else { return }
 
         socket.ackHandlers.addAck(ackNumber, callback: callback)

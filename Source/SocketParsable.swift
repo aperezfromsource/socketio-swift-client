@@ -65,7 +65,7 @@ extension SocketParsable where Self: SocketIOClientSpec {
     func parseString(_ message: String) -> Either<String, SocketPacket> {
         var reader = SocketStringReader(message: message)
         
-		guard let type = Int(reader.read(count: 1)).flatMap({ SocketPacket.PacketType(rawValue: $0) }) else {
+        guard let type = Int(reader.read(count: 1)).flatMap({ SocketPacket.PacketType(rawValue: $0) }) else {
             return .left("Invalid packet type")
         }
         
@@ -85,7 +85,7 @@ extension SocketParsable where Self: SocketIOClientSpec {
         }
         
         if reader.currentCharacter == "/" {
-            namespace = reader.readUntilOccurence(of: ",") 
+            namespace = reader.readUntilOccurence(of: ",")
         }
         
         if !reader.hasNext {
