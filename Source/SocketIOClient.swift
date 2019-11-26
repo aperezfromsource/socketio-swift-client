@@ -140,7 +140,7 @@ import Foundation
         self.init(socketURL: socketURL as URL, config: config?.toSocketConfiguration() ?? [])
     }
 
-    deinit {
+    @objc deinit {
         DefaultSocketLogger.Logger.log("Client is being released", type: logType)
         engine?.disconnect(reason: "Client Deinit")
     }
@@ -166,7 +166,7 @@ import Foundation
     /// - parameter timeoutAfter: The number of seconds after which if we are not connected we assume the connection
     ///                           has failed. Pass 0 to never timeout.
     /// - parameter withHandler: The handler to call when the client fails to connect.
-    open func connect(timeoutAfter: Int, withHandler handler: (() -> Void)?) {
+    @objc open func connect(timeoutAfter: Int, withHandler handler: (() -> Void)?) {
         assert(timeoutAfter >= 0, "Invalid timeout: \(timeoutAfter)")
 
         guard status != .connected else {
@@ -194,7 +194,7 @@ import Foundation
         }
     }
 
-    @objc private func createOnAck(_ items: [Any]) -> OnAckCallback {
+    private func createOnAck(_ items: [Any]) -> OnAckCallback {
         currentAck += 1
 
         return OnAckCallback(ackNumber: currentAck, items: items, socket: self)
@@ -222,7 +222,7 @@ import Foundation
     }
 
     /// Disconnects the socket.
-    open func disconnect() {
+    @objc open func disconnect() {
         DefaultSocketLogger.Logger.log("Closing socket", type: logType)
 
         didDisconnect(reason: "Disconnect")
@@ -326,7 +326,7 @@ import Foundation
     }
 
     // If the server wants to know that the client received data
-    func emitAck(_ ack: Int, with items: [Any]) {
+    @objc func emitAck(_ ack: Int, with items: [Any]) {
         guard status == .connected else { return }
 
         let packet = SocketPacket.packetFromEmit(items, id: ack, nsp: nsp, ack: true)
@@ -340,7 +340,7 @@ import Foundation
     /// Called when the engine closes.
     ///
     /// - parameter reason: The reason that the engine closed.
-    open func engineDidClose(reason: String) {
+   open func engineDidClose(reason: String) {
         handleQueue.async {
             self._engineDidClose(reason: reason)
         }

@@ -47,24 +47,23 @@ struct SocketStringReader {
     
     mutating func read(count: Int) -> String {
         let readString = message[currentIndex..<message.index(currentIndex, offsetBy: count)]
-        
         advance(by: count)
         
         return String(readString)
     }
     
     mutating func readUntilOccurence(of string: String) -> String {
-        let substring = message[currentIndex..<message.endIndex]
+        let substring = message.utf16[currentIndex...]
         
-        guard let foundRange = substring.range(of: string) else {
-            currentIndex = message.endIndex
+        guard let foundIndex = substring.index(of: string.utf16.first!) else {
+            currentIndex = message.utf16.endIndex
             
-            return String(substring)
+            return String(substring)!
         }
         
-        advance(by: message.distance(from: message.startIndex, to: foundRange.lowerBound) + 1)
+        advance(by: substring.distance(from: substring.startIndex, to: foundIndex) + 1)
         
-        return substring.substring(to: foundRange.lowerBound)
+        return String(substring[substring.startIndex..<foundIndex])!
     }
     
     mutating func readUntilEnd() -> String {
